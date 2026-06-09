@@ -1,0 +1,32 @@
+{
+  "name": "starlight-cosmos-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "agents/*",
+    "mcp-servers/*",
+    "skills/*",
+    "pipelines/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "eslint . --ext .ts,.tsx",
+    "build:schemas": "npm run build --workspace @starlight-cosmos/schemas",
+    "typecheck": "npm run build:schemas && npm run typecheck --workspaces --if-present",
+    "build": "npm run build:schemas && npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "format": "prettier --check ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
+    "eslint": "^9.29.0",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
