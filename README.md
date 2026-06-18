@@ -8,13 +8,13 @@
 > reels, and atlas pages — coordinated by event-driven agents, gated by mandatory
 > rights checks, and auditable end to end.
 
-[![Layers](https://img.shields.io/badge/layers-6-7fffd4?style=for-the-badge&labelColor=0d1117)](#-architecture)
-[![Agents](https://img.shields.io/badge/agents-9-c084fc?style=for-the-badge&labelColor=0d1117)](#-agents)
-[![MCP servers](https://img.shields.io/badge/MCP_servers-9-10b981?style=for-the-badge&labelColor=0d1117)](#-mcp-servers)
-[![Pipelines](https://img.shields.io/badge/pipelines-5-f59e0b?style=for-the-badge&labelColor=0d1117)](#-pipelines)
+![Layers](https://img.shields.io/badge/layers-6-7fffd4?style=for-the-badge&labelColor=0d1117)
+![Agents](https://img.shields.io/badge/agents-9-c084fc?style=for-the-badge&labelColor=0d1117)
+![MCP servers](https://img.shields.io/badge/MCP_servers-9-10b981?style=for-the-badge&labelColor=0d1117)
+![Pipelines](https://img.shields.io/badge/pipelines-5-f59e0b?style=for-the-badge&labelColor=0d1117)
 [![Built on SIP](https://img.shields.io/badge/Built_on-SIP-78a6ff?style=for-the-badge&labelColor=0d1117)](https://github.com/frankxai/Starlight-Intelligence-System)
 
-[**🗺️ Architecture**](#-architecture) · [**🛰️ Pipelines**](#-pipelines) · [**🤖 Agents**](#-agents) · [**🔌 MCP servers**](#-mcp-servers) · [**🚀 Getting started**](#-getting-started)
+[**🗺️ Architecture**](#architecture) · [**🛰️ Pipelines**](#pipelines) · [**🤖 Agents**](#agents) · [**🔌 MCP servers**](#mcp-servers) · [**🚀 Getting started**](#getting-started)
 
 </div>
 
@@ -27,7 +27,11 @@
 
 ---
 
+<a id="architecture"></a>
+
 ## 🗺️ Architecture
+
+Publishing happens only **after** the human approval gate — render is pre-approval, publish is post-approval.
 
 ```mermaid
 flowchart TB
@@ -44,21 +48,27 @@ flowchart TB
         Rights["rights-warden ⚠️ gate"]
         Publish["publisher"]
     end
-    subgraph Render["🎬 Render & publish MCPs"]
+    subgraph Render["🎬 Render MCPs (pre-approval)"]
         FFmpeg["mcp-ffmpeg-render"]
         Remotion["mcp-remotion-render"]
+    end
+    subgraph PublishMcp["📡 Publish MCPs (post-approval)"]
         Site["mcp-site-publisher"]
         Social["mcp-social-publisher"]
-        Ledger["mcp-rights-ledger"]
     end
+    Ledger["🧾 mcp-rights-ledger"]
     Approval{"🧑‍✈️ mission-control<br/>human approval"}
     Atlas["🌐 web-atlas"]
 
-    Sources --> Research --> Script --> Visual --> Video
-    Video --> Rights
-    Rights -->|cleared| Render
-    Render --> Approval
-    Approval -->|approved| Publish --> Atlas
+    Sources --> Research --> Script --> Visual --> Video --> Rights
+    Rights -->|cleared| FFmpeg
+    Rights -->|cleared| Remotion
+    FFmpeg --> Approval
+    Remotion --> Approval
+    Approval -->|approved| Publish
+    Publish --> Site
+    Publish --> Social
+    Site --> Atlas
     Rights -.logs.-> Ledger
 
     classDef gate fill:#241B0F,stroke:#f59e0b,color:#fff;
@@ -82,6 +92,8 @@ flowchart TB
 
 ---
 
+<a id="pipelines"></a>
+
 ## 🛰️ Pipelines
 
 Declarative DAGs in [`pipelines/`](pipelines/):
@@ -96,14 +108,18 @@ Declarative DAGs in [`pipelines/`](pipelines/):
 
 ---
 
+<a id="agents"></a>
+
 ## 🤖 Agents
 
-Event-driven workers in [`agents/`](agents/), coordinated by `hermes-orchestrator`:
+Nine event-driven workers in [`agents/`](agents/), coordinated by `hermes-orchestrator`:
 
-`analytics-agent` · `archivist-agent` · `cosmic-research-agent` · `publisher-agent` ·
-`rights-warden-agent` · `scriptwriter-agent` · `video-editor-agent` · `visual-director-agent`
+`hermes-orchestrator` · `analytics-agent` · `archivist-agent` · `cosmic-research-agent` ·
+`publisher-agent` · `rights-warden-agent` · `scriptwriter-agent` · `video-editor-agent` · `visual-director-agent`
 
 ---
+
+<a id="mcp-servers"></a>
 
 ## 🔌 MCP servers
 
@@ -115,6 +131,8 @@ Capability adapters in [`mcp-servers/`](mcp-servers/), each with audit-focused b
 **Governance** — `mcp-rights-ledger` · `mcp-analytics`
 
 ---
+
+<a id="getting-started"></a>
 
 ## 🚀 Getting started
 
