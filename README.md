@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/hero.svg" width="100%" alt="Starlight Cosmos Engine — Real space science → cinematic content · Rights-gated · Human-approved"/>
+</p>
+
 <div align="center">
 
 # 🌌 Starlight Cosmos Engine
