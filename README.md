@@ -1,6 +1,8 @@
 # starlight-cosmos-engine
 
-World-class monorepo foundation for Starlight Cosmos production systems.
+Monorepo foundation for Starlight Cosmos production systems.
+
+> **STATUS: SCAFFOLD (v0).** The monorepo structure, tooling, and package contracts below are real and wired. The implementations inside `apps/`, `agents/`, `mcp-servers/`, `skills/`, and `pipelines/` are mostly empty stubs. Nothing here is production-deployed yet — treat this as a foundation to build on, not a working system.
 
 ## Structure
 - `apps/` — web-atlas, mission-control, api
