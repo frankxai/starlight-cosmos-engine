@@ -1,162 +1,175 @@
-<div align="center">
+# Starlight Cosmos Engine
 
-# 🌌 Starlight Cosmos Engine
+A monorepo scaffold for a cosmos-content production system — turning raw space imagery and research into published stories through an agent + pipeline pipeline.
 
-### A production monorepo that turns real space science into cinematic content
+<p align="center">
+  <img src=".github/assets/hero.svg" alt="Starlight Cosmos Engine — cosmic content production pipeline" width="100%" />
+</p>
 
-> NASA, ESA/Webb, and arXiv source material → researched scripts → rendered shorts,
-> reels, and atlas pages — coordinated by event-driven agents, gated by mandatory
-> rights checks, and auditable end to end.
+<p align="center">
+  <a href="https://github.com/frankxai/starlight-cosmos-engine/actions/workflows/ci.yml"><img src="https://github.com/frankxai/starlight-cosmos-engine/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <img src="https://img.shields.io/badge/status-early%20scaffold-f59e0b" alt="status: early scaffold">
+  <img src="https://img.shields.io/badge/node-%3E%3D22-10b981" alt="Node >=22">
+  <img src="https://img.shields.io/badge/TypeScript-5.8-06b6d4?logo=typescript&logoColor=white" alt="TypeScript 5.8">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-06b6d4" alt="MIT License"></a>
+  <a href="https://github.com/frankxai/starlight-intelligence-system"><img src="https://img.shields.io/badge/Built%20on-SIP-fbbf24" alt="Built on SIP"></a>
+</p>
 
-![Layers](https://img.shields.io/badge/layers-6-7fffd4?style=for-the-badge&labelColor=0d1117)
-![Agents](https://img.shields.io/badge/agents-9-c084fc?style=for-the-badge&labelColor=0d1117)
-![MCP servers](https://img.shields.io/badge/MCP_servers-9-10b981?style=for-the-badge&labelColor=0d1117)
-![Pipelines](https://img.shields.io/badge/pipelines-5-f59e0b?style=for-the-badge&labelColor=0d1117)
-[![Built on SIP](https://img.shields.io/badge/Built_on-SIP-78a6ff?style=for-the-badge&labelColor=0d1117)](https://github.com/frankxai/Starlight-Intelligence-System)
+> **Honest status:** this is a real, well-formed npm-workspaces monorepo with 34 packages wired end-to-end by TypeScript project references and a working CI pipeline — but only two of those packages carry implemented logic today. Everything else is intentional scaffolding: a `moduleId` + `purpose` stub, a `package.json`, and a `tsconfig.json`, ready for a contributor to fill in. See [What's actually implemented](#whats-actually-implemented) below before you assume otherwise.
 
-[**🗺️ Architecture**](#architecture) · [**🛰️ Pipelines**](#pipelines) · [**🤖 Agents**](#agents) · [**🔌 MCP servers**](#mcp-servers) · [**🚀 Getting started**](#getting-started)
+## What it is
 
-</div>
+Per `docs/architecture.md`, the engine is a six-layer workspace: **apps** (API backbone, mission-control approvals, web-atlas publishing surface), **agents** (event-driven workers coordinated by Hermes orchestration), **MCP servers** (external capability adapters with audit-focused boundaries), **skills** (reusable recipes that compose agents and MCP servers), **pipelines** (declarative DAGs that execute production workflows), and shared **packages** (contracts and infra utilities). Three principles anchor every layer: rights/attribution checks are mandatory gates, every pipeline stage emits an auditable event, and human approval gates sit in front of high-risk publishing actions. The `docs/roadmap.md` sequencing is Phase 1 — API + Mission Control + Hermes orchestration + the rights path + the Daily Cosmos Short pipeline end-to-end; Phase 2 — Web Atlas publishing plus multi-platform distribution and analytics; Phase 3 — full agent/skill expansion plus weekly and research pipelines.
 
----
+## What's actually implemented
 
-> [!NOTE]
-> A workspace monorepo with six layers — **apps, agents, MCP servers, skills, pipelines, and
-> shared packages**. Rights and attribution checks are mandatory gates; every pipeline stage
-> emits auditable events; human approval gates guard every high-risk publishing action.
+Verified by reading source, not folder names.
 
----
-
-<a id="architecture"></a>
-
-## 🗺️ Architecture
-
-Publishing happens only **after** the human approval gate — render is pre-approval, publish is post-approval.
-
-```mermaid
-flowchart TB
-    subgraph Sources["🔭 Source MCPs"]
-        NASA["mcp-nasa-media"]
-        Webb["mcp-esa-webb"]
-        Arxiv["mcp-arxiv-space"]
-    end
-    subgraph Agents["🤖 Event-driven agents (Hermes-orchestrated)"]
-        Research["cosmic-research"]
-        Script["scriptwriter"]
-        Visual["visual-director"]
-        Video["video-editor"]
-        Rights["rights-warden ⚠️ gate"]
-        Publish["publisher"]
-    end
-    subgraph Render["🎬 Render MCPs (pre-approval)"]
-        FFmpeg["mcp-ffmpeg-render"]
-        Remotion["mcp-remotion-render"]
-    end
-    subgraph PublishMcp["📡 Publish MCPs (post-approval)"]
-        Site["mcp-site-publisher"]
-        Social["mcp-social-publisher"]
-    end
-    Ledger["🧾 mcp-rights-ledger"]
-    Approval{"🧑‍✈️ mission-control<br/>human approval"}
-    Atlas["🌐 web-atlas"]
-
-    Sources --> Research --> Script --> Visual --> Video --> Rights
-    Rights -->|cleared| FFmpeg
-    Rights -->|cleared| Remotion
-    FFmpeg --> Approval
-    Remotion --> Approval
-    Approval -->|approved| Publish
-    Publish --> Site
-    Publish --> Social
-    Site --> Atlas
-    Rights -.logs.-> Ledger
-
-    classDef gate fill:#241B0F,stroke:#f59e0b,color:#fff;
-    class Rights,Approval gate;
-```
-
-### Runtime domains
-| Layer | Role |
+| Layer | Verified state |
 |---|---|
-| **Apps** (`apps/`) | API backbone, `mission-control` approvals, and the `web-atlas` publishing surface. |
-| **Agents** (`agents/`) | Event-driven workers coordinated by Hermes orchestration. |
-| **MCP servers** (`mcp-servers/`) | External capability adapters with audit-focused boundaries. |
-| **Skills** (`skills/`) | Reusable recipes that compose agents and MCP servers. |
-| **Pipelines** (`pipelines/`) | Declarative DAGs that execute production workflows. |
-| **Packages** (`packages/`) | Shared `auth`, `config`, `logging`, `queue-event-client`, `schemas`, `telemetry`. |
+| `packages/schemas` | **Implemented.** Real shared contracts — `RightsMetadata`, `PipelineEvent`, `AgentEnvelope`, `ContentStatus` — consumed by other workspaces. |
+| `apps/api` | **Implemented.** `normalizeIngest`, `validateRights`, `orchestratePipelineEvent`, `toAgentEnvelope` are working functions against the `schemas` contracts, with a passing vitest suite. |
+| `apps/web-atlas`, `apps/mission-control` | Scaffold only — a `moduleId`/`purpose` export, no logic. |
+| `agents/*` (9 workers) | Scaffold only — same stub pattern in every `src/index.ts`. |
+| `mcp-servers/*` (9 adapters) | Scaffold only — no MCP protocol wiring yet, just the stub export. |
+| `pipelines/*` (5 DAGs) | Scaffold only. `research-digest` has a test file, but it only asserts the stub's metadata string. |
+| `skills/*` (8 recipes) | Scaffold only. |
+| `packages/auth`, `config`, `logging`, `queue-event-client`, `telemetry` | Scaffold only. |
+| `docs/*` (5 files) | **Real, substantive.** Architecture, roadmap, rights-and-credit policy, content quality bar, and contribution guide are all written out — this README's claims are grounded in them. |
+| Root tooling (`package.json` workspaces, `eslint.config.js`, `tsconfig.base.json`, `.github/workflows/ci.yml`) | **Real and working.** npm workspaces across all six layers, shared TS config, and a CI job that runs install → lint → typecheck → test → build on every push/PR. |
 
-### Core principles
-1. Rights and attribution checks are **mandatory gates**.
-2. Every pipeline stage emits **auditable events**.
-3. **Human approval gates** exist for high-risk publishing actions.
+The takeaway: the *shape* of the system is fully designed and enforced by tooling (every workspace typechecks, lints, and builds in CI), but the *behavior* — agent logic, MCP adapters, pipeline execution, skill recipes — is Phase 1 work still ahead, per the roadmap.
 
----
+## Quickstart
 
-<a id="pipelines"></a>
-
-## 🛰️ Pipelines
-
-Declarative DAGs in [`pipelines/`](pipelines/):
-
-| Pipeline | What it produces |
-|---|---|
-| `daily-cosmos-short` | A daily short-form video from the day's best space imagery. |
-| `weekly-cosmic-briefing` | A weekly briefing assembled from research + media. |
-| `research-digest` | A digest distilled from arXiv space-science papers. |
-| `multi-platform-publish` | Fan-out publishing across platforms with rights checks. |
-| `starlight-atlas-page` | A published atlas page on the web surface. |
-
----
-
-<a id="agents"></a>
-
-## 🤖 Agents
-
-Nine event-driven workers in [`agents/`](agents/), coordinated by `hermes-orchestrator`:
-
-`hermes-orchestrator` · `analytics-agent` · `archivist-agent` · `cosmic-research-agent` ·
-`publisher-agent` · `rights-warden-agent` · `scriptwriter-agent` · `video-editor-agent` · `visual-director-agent`
-
----
-
-<a id="mcp-servers"></a>
-
-## 🔌 MCP servers
-
-Capability adapters in [`mcp-servers/`](mcp-servers/), each with audit-focused boundaries:
-
-**Sources** — `mcp-nasa-media` · `mcp-esa-webb` · `mcp-arxiv-space`
-**Render** — `mcp-ffmpeg-render` · `mcp-remotion-render`
-**Publish** — `mcp-site-publisher` · `mcp-social-publisher`
-**Governance** — `mcp-rights-ledger` · `mcp-analytics`
-
----
-
-<a id="getting-started"></a>
-
-## 🚀 Getting started
+Scripts below are copied verbatim from `package.json` — all five exist and run against the full workspace tree.
 
 ```bash
 npm install
-npm run lint
-npm run typecheck
-npm run build:schemas   # build shared contract schemas
-npm run test            # vitest
-npm run build
+npm run lint        # eslint . --ext .ts,.tsx
+npm run typecheck   # builds packages/schemas first, then tsc --noEmit across all workspaces
+npm run test        # vitest across all workspaces (passWithNoTests where no tests exist yet)
+npm run build       # builds packages/schemas first, then every workspace with a build script
 ```
 
+CI (`.github/workflows/ci.yml`) runs this exact sequence on every push to `main` and every pull request.
+
+## Architecture
+
+Flow per `docs/architecture.md`: raw source material enters through the API, gets normalized and rights-checked, flows through agent-executed pipeline stages coordinated by Hermes, and exits through publishing surfaces gated by human approval. Solid borders below are implemented; dashed borders are scaffolded (stub only, no logic yet).
+
+```mermaid
+flowchart LR
+    subgraph Sources["Raw cosmic data"]
+        NASA[NASA / ESA Webb imagery]
+        ArXiv[arXiv research]
+    end
+
+    subgraph MCP["mcp-servers/ — capability adapters"]
+        mcpNasa["mcp-nasa-media"]:::scaffold
+        mcpEsa["mcp-esa-webb"]:::scaffold
+        mcpArxiv["mcp-arxiv-space"]:::scaffold
+        mcpFfmpeg["mcp-ffmpeg-render"]:::scaffold
+        mcpRemotion["mcp-remotion-render"]:::scaffold
+        mcpRights["mcp-rights-ledger"]:::scaffold
+        mcpSite["mcp-site-publisher"]:::scaffold
+        mcpSocial["mcp-social-publisher"]:::scaffold
+        mcpAnalytics["mcp-analytics"]:::scaffold
+    end
+
+    subgraph API["apps/api"]
+        Ingest["normalizeIngest / validateRights"]:::implemented
+    end
+
+    subgraph Agents["agents/ — event-driven workers"]
+        Hermes["hermes-orchestrator"]:::scaffold
+        Research["cosmic-research-agent"]:::scaffold
+        Script["scriptwriter-agent"]:::scaffold
+        Visual["visual-director-agent"]:::scaffold
+        Editor["video-editor-agent"]:::scaffold
+        Rights["rights-warden-agent"]:::scaffold
+        Archivist["archivist-agent"]:::scaffold
+        Analytics["analytics-agent"]:::scaffold
+        Publisher["publisher-agent"]:::scaffold
+    end
+
+    subgraph Pipelines["pipelines/ — declarative DAGs"]
+        Daily["daily-cosmos-short"]:::scaffold
+        Weekly["weekly-cosmic-briefing"]:::scaffold
+        Digest["research-digest"]:::scaffold
+        AtlasPage["starlight-atlas-page"]:::scaffold
+        MultiPub["multi-platform-publish"]:::scaffold
+    end
+
+    subgraph Skills["skills/ — reusable recipes"]
+        Apod["apod-to-short"]:::scaffold
+        PaperBrief["paper-to-visual-brief"]:::scaffold
+        RightsCheck["rights-check"]:::scaffold
+    end
+
+    subgraph Apps["apps/ — publishing surfaces"]
+        MissionControl["mission-control — approval gate"]:::scaffold
+        WebAtlas["web-atlas — public surface"]:::scaffold
+    end
+
+    subgraph Shared["packages/ — shared contracts"]
+        Schemas["schemas — RightsMetadata, PipelineEvent, AgentEnvelope"]:::implemented
+    end
+
+    NASA --> mcpNasa
+    ArXiv --> mcpArxiv
+    mcpNasa --> Ingest
+    mcpArxiv --> Ingest
+    Ingest -->|validateRights| Hermes
+    Hermes --> Research --> Script --> Visual --> Editor
+    Rights -.gate.-> Editor
+    Editor --> Pipelines
+    Daily --> MissionControl
+    Weekly --> MissionControl
+    Digest --> MissionControl
+    MissionControl -->|human approval| WebAtlas
+    MissionControl --> mcpSite
+    MissionControl --> mcpSocial
+    Publisher --> mcpSite
+    Publisher --> mcpSocial
+    Analytics --> mcpAnalytics
+    Skills -.compose.-> Agents
+    Schemas -.contracts.-> Ingest
+    Schemas -.contracts.-> Agents
+
+    classDef implemented fill:#10b981,stroke:#0a0a0b,color:#0a0a0b,stroke-width:2px;
+    classDef scaffold fill:#0a0a0b,stroke:#f59e0b,color:#f59e0b,stroke-width:1px,stroke-dasharray:4 3;
+```
+
+## Structure
+
+| Path | What's there |
+|---|---|
+| `apps/` | 3 workspaces — `api` (implemented ingestion/rights logic), `mission-control` (approval-gate stub), `web-atlas` (publishing-surface stub) |
+| `agents/` | 9 event-driven worker stubs — `hermes-orchestrator`, `cosmic-research-agent`, `scriptwriter-agent`, `visual-director-agent`, `video-editor-agent`, `rights-warden-agent`, `archivist-agent`, `analytics-agent`, `publisher-agent` |
+| `mcp-servers/` | 9 external capability adapter stubs — NASA media, ESA Webb, arXiv, ffmpeg render, Remotion render, rights ledger, site publisher, social publisher, analytics |
+| `packages/` | 6 shared workspaces — `schemas` (implemented contracts), plus stubs for `auth`, `config`, `logging`, `queue-event-client`, `telemetry` |
+| `pipelines/` | 5 declarative DAG stubs — `daily-cosmos-short`, `weekly-cosmic-briefing`, `research-digest`, `starlight-atlas-page`, `multi-platform-publish` |
+| `skills/` | 8 reusable-recipe stubs — `apod-to-short`, `cosmic-myth-layer`, `image-to-cosmic-explainer`, `launch-to-reel`, `paper-to-visual-brief`, `rights-check`, `social-repurposer`, `thumbnail-brief` |
+| `docs/` | Real governance docs — [`architecture.md`](docs/architecture.md), [`roadmap.md`](docs/roadmap.md), [`rights-and-credit-policy.md`](docs/rights-and-credit-policy.md), [`content-quality-bar.md`](docs/content-quality-bar.md), [`contribution-guide.md`](docs/contribution-guide.md) |
+| `.github/workflows/ci.yml` | Working CI — install → lint → typecheck → test → build on every push/PR |
+
+## Governance
+
+- **Rights are a mandatory gate**, not an afterthought — every asset needs `source_id`, `source_url`, `license_type`, `creator_name`, and `attribution_text` before it's publish-eligible ([`docs/rights-and-credit-policy.md`](docs/rights-and-credit-policy.md)), enforced today in `apps/api`'s `validateRights`.
+- **Content ships only when it clears defined quality thresholds** across factual accuracy, narrative clarity, visual coherence, platform fit, and rights completeness ([`docs/content-quality-bar.md`](docs/content-quality-bar.md)).
+- **Contribution standards**: TypeScript strict mode across all workspaces, tests required for new contracts and skill logic, one scoped capability per pull request ([`docs/contribution-guide.md`](docs/contribution-guide.md)).
+
+## Roadmap
+
+1. **Phase 1 (MVP)** — API + Mission Control + Hermes orchestration + the rights path; Daily Cosmos Short pipeline end-to-end.
+2. **Phase 2** — Web Atlas publishing; multi-platform publishing and the analytics loop.
+3. **Phase 3** — Full agent and skill expansion; weekly and research pipelines with optimization controls.
+
+Full detail: [`docs/roadmap.md`](docs/roadmap.md).
+
 ---
 
-## 📚 Docs
-
-[`architecture.md`](docs/architecture.md) · [`content-quality-bar.md`](docs/content-quality-bar.md) ·
-[`rights-and-credit-policy.md`](docs/rights-and-credit-policy.md) · [`contribution-guide.md`](docs/contribution-guide.md) ·
-[`roadmap.md`](docs/roadmap.md)
-
----
-
-<div align="center">
-
-**Built on SIP** · Starlight Intelligence Protocol · _Rights-gated. Auditable. Human-approved._
-
-</div>
+<p align="center">
+  Part of the <a href="https://github.com/frankxai/starlight-intelligence-system">Starlight Intelligence System</a> ecosystem — built on the Starlight Intelligence Protocol (SIP) substrate.
+</p>
