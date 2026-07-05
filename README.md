@@ -11,6 +11,7 @@ A monorepo scaffold for a cosmos-content production system — turning raw space
   <img src="https://img.shields.io/badge/status-early%20scaffold-f59e0b" alt="status: early scaffold">
   <img src="https://img.shields.io/badge/node-%3E%3D22-10b981" alt="Node >=22">
   <img src="https://img.shields.io/badge/TypeScript-5.8-06b6d4?logo=typescript&logoColor=white" alt="TypeScript 5.8">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-06b6d4" alt="MIT License"></a>
   <a href="https://github.com/frankxai/starlight-intelligence-system"><img src="https://img.shields.io/badge/Built%20on-SIP-fbbf24" alt="Built on SIP"></a>
 </p>
 
