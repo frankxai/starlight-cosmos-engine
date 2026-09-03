@@ -27,7 +27,7 @@ Verified by reading source, not folder names.
 
 | Layer | Verified state |
 |---|---|
-| `packages/schemas` | **Implemented.** Real shared contracts — `RightsMetadata`, `PipelineEvent`, `AgentEnvelope`, `ContentStatus` — consumed by other workspaces. |
+| `packages/schemas` | **Implemented.** Real shared contracts — `RightsMetadata`, `ContentProvenance`, `PipelineEvent`, `AgentEnvelope`, `ContentStatus` — consumed by other workspaces. |
 | `apps/api` | **Implemented.** `normalizeIngest`, `validateRights`, `orchestratePipelineEvent`, `toAgentEnvelope` are working functions against the `schemas` contracts, with a passing vitest suite. |
 | `apps/web-atlas`, `apps/mission-control` | Scaffold only — a `moduleId`/`purpose` export, no logic. |
 | `agents/*` (9 workers) | Scaffold only — same stub pattern in every `src/index.ts`. |
@@ -157,7 +157,7 @@ flowchart LR
 ## Governance
 
 - **Rights are a mandatory gate**, not an afterthought — every asset needs `source_id`, `source_url`, `license_type`, `creator_name`, and `attribution_text` before it's publish-eligible ([`docs/rights-and-credit-policy.md`](docs/rights-and-credit-policy.md)), enforced today in `apps/api`'s `validateRights`.
-- **Content ships only when it clears defined quality thresholds** across factual accuracy, narrative clarity, visual coherence, platform fit, and rights completeness ([`docs/content-quality-bar.md`](docs/content-quality-bar.md)).
+- **Content ships only when it clears defined quality thresholds** across factual accuracy, ontology integrity, provenance classification, narrative clarity, visual coherence, platform fit, rights completeness, and human approval ([`docs/content-quality-bar.md`](docs/content-quality-bar.md)).
 - **Contribution standards**: TypeScript strict mode across all workspaces, tests required for new contracts and skill logic, one scoped capability per pull request ([`docs/contribution-guide.md`](docs/contribution-guide.md)).
 
 ## Roadmap
