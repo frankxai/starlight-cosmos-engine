@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeIngest, validateRights } from './index.js';
+import { isPublishableProvenance, normalizeIngest, validateRights } from './index.js';
 
 describe('api contracts', () => {
   it('normalizes ingest payloads', () => {
@@ -17,5 +17,39 @@ describe('api contracts', () => {
         attributionText: 'Image courtesy of NASA',
       })
     ).toBe(true);
+  });
+
+  it('requires evidence for historical claims', () => {
+    expect(
+      isPublishableProvenance({
+        classification: 'historical-source-claim',
+        claimIds: [],
+        sourceIds: [],
+        fictionBoundary: false,
+        humanApproved: true,
+      })
+    ).toBe(false);
+  });
+
+  it('requires a visible fiction boundary and human approval', () => {
+    expect(
+      isPublishableProvenance({
+        classification: 'arcanea-fiction',
+        claimIds: [],
+        sourceIds: [],
+        fictionBoundary: true,
+        humanApproved: true,
+      })
+    ).toBe(true);
+
+    expect(
+      isPublishableProvenance({
+        classification: 'arcanea-fiction',
+        claimIds: [],
+        sourceIds: [],
+        fictionBoundary: false,
+        humanApproved: true,
+      })
+    ).toBe(false);
   });
 });

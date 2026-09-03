@@ -1,4 +1,4 @@
-import type { AgentEnvelope, PipelineEvent, RightsMetadata } from '@starlight-cosmos/schemas';
+import type { AgentEnvelope, ContentProvenance, PipelineEvent, RightsMetadata } from '@starlight-cosmos/schemas';
 
 export interface IngestRequest {
   source: string;
@@ -36,3 +36,25 @@ export const toAgentEnvelope = (agent: string, rights: RightsMetadata): AgentEnv
   payload: {},
   rights,
 });
+
+
+export const isPublishableProvenance = (provenance: ContentProvenance): boolean => {
+  if (!provenance.humanApproved) return false;
+
+  if (
+    ['historical-source-claim', 'scholarly-interpretation'].includes(provenance.classification) &&
+    provenance.sourceIds.length === 0
+  ) return false;
+
+  if (
+    ['starlight-interpretation', 'original-starlight-philosophy', 'mixed'].includes(provenance.classification) &&
+    provenance.claimIds.length === 0
+  ) return false;
+
+  if (
+    ['original-literary-mythic-material', 'arcanea-fiction', 'mixed'].includes(provenance.classification) &&
+    !provenance.fictionBoundary
+  ) return false;
+
+  return true;
+};
