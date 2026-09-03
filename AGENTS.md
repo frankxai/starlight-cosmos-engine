@@ -39,7 +39,7 @@ introducing pnpm here).
 - Prefer existing repo conventions over new abstractions.
 - Run the health command before handoff when feasible.
 - Do not publish secrets, private memory, credentials, or internal-only strategy.
-- Follow `docs/architecture.md` layer boundaries: rights/attribution checks are mandatory gates,
+- Follow `docs/ontology-and-provenance-boundary.md`: classify substantial claims and never collapse Starlight, real traditions, science, and Arcanea fiction.\n- Follow `docs/architecture.md` layer boundaries: rights/attribution checks are mandatory gates,
   every pipeline stage emits an auditable event, human approval gates sit in front of high-risk
   publishing actions.
 
