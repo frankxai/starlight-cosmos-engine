@@ -22,3 +22,22 @@ export interface AgentEnvelope<TPayload = Record<string, unknown>> {
   payload: TPayload;
   rights: RightsMetadata;
 }
+
+
+export type ProvenanceClass =
+  | 'historical-source-claim'
+  | 'scholarly-interpretation'
+  | 'starlight-interpretation'
+  | 'original-starlight-philosophy'
+  | 'original-literary-mythic-material'
+  | 'arcanea-fiction'
+  | 'mixed';
+
+export interface ContentProvenance {
+  classification: ProvenanceClass;
+  claimIds: string[];
+  sourceIds: string[];
+  fictionBoundary: boolean;
+  humanApproved: boolean;
+  canonVersion?: string;
+}
