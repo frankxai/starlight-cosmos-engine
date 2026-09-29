@@ -10,12 +10,12 @@ A monorepo scaffold for a cosmos-content production system — turning raw space
   <a href="https://github.com/frankxai/starlight-cosmos-engine/actions/workflows/ci.yml"><img src="https://github.com/frankxai/starlight-cosmos-engine/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
   <img src="https://img.shields.io/badge/status-early%20scaffold-f59e0b" alt="status: early scaffold">
   <img src="https://img.shields.io/badge/node-%3E%3D22-10b981" alt="Node >=22">
-  <img src="https://img.shields.io/badge/TypeScript-5.8-06b6d4?logo=typescript&logoColor=white" alt="TypeScript 5.8">
+  <img src="https://img.shields.io/badge/TypeScript-5.x-06b6d4?logo=typescript&logoColor=white" alt="TypeScript 5.x">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-06b6d4" alt="MIT License"></a>
   <a href="https://github.com/frankxai/starlight-intelligence-system"><img src="https://img.shields.io/badge/Built%20on-SIP-fbbf24" alt="Built on SIP"></a>
 </p>
 
-> **Honest status:** this is a real, well-formed npm-workspaces monorepo with 34 packages wired end-to-end by TypeScript project references and a working CI pipeline — but only two of those packages carry implemented logic today. Everything else is intentional scaffolding: a `moduleId` + `purpose` stub, a `package.json`, and a `tsconfig.json`, ready for a contributor to fill in. See [What's actually implemented](#whats-actually-implemented) below before you assume otherwise.
+> **Honest status:** this is a real, well-formed npm-workspaces monorepo with 40 packages that share one strict TypeScript base config and a working CI pipeline — but only two of those packages carry implemented logic today. Everything else is intentional scaffolding: a `moduleId` + `purpose` stub, a `package.json`, and a `tsconfig.json`, ready for a contributor to fill in. See [What's actually implemented](#whats-actually-implemented) below before you assume otherwise.
 
 ## What it is
 
