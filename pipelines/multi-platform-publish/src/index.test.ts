@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { moduleId, purpose } from "./index";
+import { moduleId, purpose } from "./index.js";
 
 describe("multi-platform-publish", () => {
   it("should export correct moduleId", () => {
