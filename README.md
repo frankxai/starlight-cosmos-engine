@@ -28,7 +28,7 @@ Verified by reading source, not folder names.
 | Layer | Verified state |
 |---|---|
 | `packages/schemas` | **Implemented.** Real shared contracts — `RightsMetadata`, `PipelineEvent`, `AgentEnvelope`, `ContentStatus` — consumed by other workspaces. |
-| `apps/api` | **Implemented.** `normalizeIngest`, `validateRights`, `orchestratePipelineEvent`, `toAgentEnvelope` are working functions against the `schemas` contracts, with a passing vitest suite. |
+| `apps/api` | **Implemented in part.** `normalizeIngest`, `validateRights`, `orchestratePipelineEvent`, `toAgentEnvelope`, and a pure approximate sky-geometry resolver have tests. The resolver has no real catalog, ephemeris adapter, device input, or production service. |
 | `apps/web-atlas`, `apps/mission-control` | Scaffold only — a `moduleId`/`purpose` export, no logic. |
 | `agents/*` (9 workers) | Scaffold only — same stub pattern in every `src/index.ts`. |
 | `mcp-servers/*` (9 adapters) | Scaffold only — no MCP protocol wiring yet, just the stub export. |
@@ -39,6 +39,8 @@ Verified by reading source, not folder names.
 | Root tooling (`package.json` workspaces, `eslint.config.js`, `tsconfig.base.json`, `.github/workflows/ci.yml`) | **Real and working.** npm workspaces across all six layers, shared TS config, and a CI job that runs install → lint → typecheck → test → build on every push/PR. |
 
 The takeaway: the *shape* of the system is fully designed and enforced by tooling (every workspace typechecks, lints, and builds in CI), but the *behavior* — agent logic, MCP adapters, pipeline execution, skill recipes — is Phase 1 work still ahead, per the roadmap.
+
+An additional proposed product vertical, **Starlight Sky**, starts with the tested sky-geometry candidate resolver and its [product and release contract](docs/starlight-sky/PRODUCT-AND-RELEASE.md). The observer app and physical-device accuracy have not been built or verified.
 
 ## Quickstart
 

@@ -1,4 +1,21 @@
-import type { AgentEnvelope, PipelineEvent, RightsMetadata } from '@starlight-cosmos/schemas';
+import type {
+  AgentEnvelope,
+  PipelineEvent,
+  RightsMetadata,
+} from '@starlight-cosmos/schemas';
+export {
+  angularSeparationDeg,
+  equatorialToHorizontal,
+  resolveSkyPointing,
+} from './sky.js';
+export type {
+  HorizontalPosition,
+  Observer,
+  Pointing,
+  SkyResolution,
+  SkyTarget,
+  TargetMatch,
+} from './sky.js';
 
 export interface IngestRequest {
   source: string;
@@ -20,9 +37,18 @@ export const normalizeIngest = (request: IngestRequest): NormalizedAsset => ({
 });
 
 export const validateRights = (rights: RightsMetadata): boolean =>
-  [rights.sourceId, rights.sourceUrl, rights.licenseType, rights.creatorName, rights.attributionText].every(Boolean);
+  [
+    rights.sourceId,
+    rights.sourceUrl,
+    rights.licenseType,
+    rights.creatorName,
+    rights.attributionText,
+  ].every(Boolean);
 
-export const orchestratePipelineEvent = (pipeline: string, step: string): PipelineEvent => ({
+export const orchestratePipelineEvent = (
+  pipeline: string,
+  step: string
+): PipelineEvent => ({
   pipeline,
   step,
   correlationId: crypto.randomUUID(),
@@ -30,7 +56,10 @@ export const orchestratePipelineEvent = (pipeline: string, step: string): Pipeli
   payload: {},
 });
 
-export const toAgentEnvelope = (agent: string, rights: RightsMetadata): AgentEnvelope => ({
+export const toAgentEnvelope = (
+  agent: string,
+  rights: RightsMetadata
+): AgentEnvelope => ({
   agent,
   intent: 'execute',
   payload: {},
